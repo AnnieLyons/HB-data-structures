@@ -14,11 +14,16 @@ def unique_houses(filename):
 
     """
 
+    f = open(filename)
     houses = set()
+    
+    for line in f:
+        data = line.split("|")
+        if data[2] != "":
+            houses.add(data[2])
+    print(houses)        
+    return list(houses)
 
-    # Code goes here
-
-    return houses
 
 
 def sort_by_cohort(filename):
