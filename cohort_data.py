@@ -14,17 +14,16 @@ def unique_houses(filename):
 
     """
 
-    f = open(filename)
+ 
     houses = set()
-    
+    f = open(filename)
     for line in f:
         data = line.split("|")
         if data[2] != "":
             houses.add(data[2])
-    print(houses)        
-    return list(houses)
-
-
+    f.close()     
+    return houses
+    
 
 def sort_by_cohort(filename):
     """TODO: Return a list of all cohort lists, including ghosts but not instructors.
@@ -47,7 +46,28 @@ def sort_by_cohort(filename):
     fall_15 = []
     ghosts = []
 
-    # Code goes here
+    f = open(filename)
+    for line in f:
+        line = line.rstrip()
+        data = line.split("|")
+        name = data[0]+" "+data[1]
+
+        if data[-1] == "Fall 2015":
+            fall_15.append(name)
+        elif data[-1] == "Summer 2016":
+            summer_16.append(name)
+        elif data[-1] == "Spring 2016":
+            spring_16.append(name)
+        elif data[-1] == "Winter 2016":
+            winter_16.append(name)
+        elif data[-1] == "G":
+            ghosts.append(name)
+
+    all_students.append(fall_15)
+    all_students.append(winter_16)
+    all_students.append(spring_16)
+    all_students.append(summer_16)
+    all_students.append(ghosts)
 
     return all_students
 
@@ -75,7 +95,39 @@ def hogwarts_by_house(filename):
     ghosts = []
     instructors = []
 
-    # Code goes here
+    
+
+    f = open(filename)
+    for line in f:
+        line = line.rstrip()
+        data = line.split("|")
+        name = data[1]
+
+        if data[2] != "":
+            if data[2] == "Dumbledore's Army":
+                dumbledores_army.append(name)
+            elif data[2] == "Gryffindor":
+                gryffindor.append(name)
+            elif data[2] == "Hufflepuff":
+                hufflepuff.append(name)
+            elif data[2] == "Ravenclaw":
+                ravenclaw.append(name)
+            elif data[2] == "Slytherin":
+                slytherin.append(name)
+        elif data[-1] == "G":
+            ghosts.append(name)
+        else:
+            instructors.append(name)
+
+    all_hogwarts.append(sorted(dumbledores_army))
+    all_hogwarts.append(sorted(gryffindor))
+    all_hogwarts.append(sorted(hufflepuff))
+    all_hogwarts.append(sorted(ravenclaw))
+    all_hogwarts.append(sorted(slytherin))
+    all_hogwarts.append(sorted(ghosts))
+    all_hogwarts.append(sorted(instructors))
+
+    
 
     return all_hogwarts
 
