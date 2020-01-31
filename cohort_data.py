@@ -14,14 +14,17 @@ def unique_houses(filename):
 
     """
 
- 
     houses = set()
-    f = open(filename)
-    for line in f:
+    
+    file = open(filename)
+    
+    for line in file:
+        line = line.rstrip()
         data = line.split("|")
         if data[2] != "":
             houses.add(data[2])
-    f.close()     
+    file.close()     
+    
     return houses
     
 
@@ -46,20 +49,25 @@ def sort_by_cohort(filename):
     fall_15 = []
     ghosts = []
 
-    f = open(filename)
-    for line in f:
+    file = open(filename)
+
+    for line in file:
         line = line.rstrip()
         data = line.split("|")
-        name = data[0]+" "+data[1]
+        name = data[0] + " " + data[1]
 
         if data[-1] == "Fall 2015":
             fall_15.append(name)
+
         elif data[-1] == "Summer 2016":
             summer_16.append(name)
+
         elif data[-1] == "Spring 2016":
             spring_16.append(name)
+
         elif data[-1] == "Winter 2016":
             winter_16.append(name)
+
         elif data[-1] == "G":
             ghosts.append(name)
 
@@ -95,10 +103,9 @@ def hogwarts_by_house(filename):
     ghosts = []
     instructors = []
 
-    
+    file = open(filename)
 
-    f = open(filename)
-    for line in f:
+    for line in file:
         line = line.rstrip()
         data = line.split("|")
         name = data[1]
@@ -127,8 +134,6 @@ def hogwarts_by_house(filename):
     all_hogwarts.append(sorted(ghosts))
     all_hogwarts.append(sorted(instructors))
 
-    
-
     return all_hogwarts
 
 
@@ -147,7 +152,16 @@ def all_students_tuple_list(filename):
 
     student_list = []
 
-    # Code goes here
+    file = open(filename)
+
+    for line in file:
+        line = line.rstrip()
+        student = line.split("|")
+        first_name, last_name, house, advisor, cohort = student
+
+        if house:
+            student_list.append(
+                (first_name + " " + last_name, house, advisor, cohort))
 
     return student_list
 
@@ -172,7 +186,14 @@ def find_cohort_by_student_name(student_list):
 
     """
 
-    # Code goes here
+    search_name = input("Who are you looking for? ")
+
+    for student_tuple in student_list:
+        student_name, house, advisor, cohort = student_tuple
+
+        if serach_name == student_name:
+            print(f"{student_name} was in the {cohort} cohort.")
+            return
 
     return "Student not found."
 
@@ -193,9 +214,29 @@ def find_name_duplicates(filename):
 
     """
 
-    duplicate_names = set()
+    fall_15 = set()
+    winter_16 = set()
+    spring_16 = set()
+    summer_16 = set()
 
-    # Code goes here
+    file = open(filename)
+
+    for line in file:
+        line = line.rstrip()
+        student = line.split("|")
+
+        first_name, last_name, house, advisor, cohort = student
+
+        if cohort == "Fall 2015":
+            fall_15.add(last_name)
+        elif cohort == "Winter 2016":
+            winter_16.add(last_name)
+        elif cohort == "Spring 2016":
+            spring_16.add(last_name)
+        elif cohort == "Summer 2016":
+            summer_16.add(last_name)
+
+    duplicate_names = fall_15 & winter_16 & spring_16 & summer_16
 
     return duplicate_names
 
@@ -226,9 +267,25 @@ def find_house_members_by_student_name(student_list):
 
      """
 
-    # Code goes here
+    search_name = input("Choose a student: ")
 
-    return
+    for student in student_list:
+        student_name, house, advisor, cohort = student
+
+        if search_name == student_name:
+
+            print(f"{student_name} was in house {house} in the {cohort} cohort.")
+            print("The following students are also in their house:")
+
+            for other_student in student_list:
+                if (other_student[3] == cohort
+                    and other_student[1] == house
+                    and other_student[0] != search_name):
+                    print(other_student[0])
+
+            return
+
+    print("Student not found.")
 
 
 #############################################################################
